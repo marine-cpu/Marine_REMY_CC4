@@ -118,8 +118,8 @@ app.get('/error', (req, res) => {
  *                   example: "Vous avez demandé des infos pour : example.com"
  */
 app.get('/:url', (req, res) => {
-  const url = req.params.url;
-  res.json({ message: `Vous avez demandé des infos pour : ${url}` });
+//   const url = req.params.url;
+//   res.json({ message: `Vous avez demandé des infos pour : ${url}` });
 });
 
 
@@ -166,14 +166,14 @@ app.get('/:url', (req, res) => {
  *                   example: "ECONNREFUSED"
  */
 app.get('/status/:url', async (req, res) => {
-  const url = req.params.url;
+//   const url = req.params.url;
 
-  try {
-    const response = await axios.get(`http://${url}`);
-    res.json({ message: `L'URL est accessible`, status: response.status });
-  } catch (error) {
-    res.status(400).json({ message: `Impossible d'accéder à l'URL`, error: error.message });
-  }
+//   try {
+//     const response = await axios.get(`http://${url}`);
+//     res.json({ message: `L'URL est accessible`, status: response.status });
+//   } catch (error) {
+//     res.status(400).json({ message: `Impossible d'accéder à l'URL`, error: error.message });
+//   }
 });
 
 // Middleware de gestion des erreurs
