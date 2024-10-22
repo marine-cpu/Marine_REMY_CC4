@@ -1,0 +1,70 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shorten URL</title>
+
+</head>
+<body>
+    <h1>Raccourcisseur d'URL</h1>
+    <form method="post" action="/" id="submit-link">
+        <label for="url">Entrez l'URL à raccourcir :</label>
+        <input name="url" id="url" type="url" placeholder="https://example.com" required />
+        <button type="submit">Raccourcir</button>
+    </form>
+
+    <h2>Nombre de Liens : <span id="link-count">0</span></h2>
+
+    <div id="link-container">
+        <h2>Liens Raccourcis :</h2>
+        <div id="links"></div>
+    </div>
+
+    <script>
+        // Fonction pour récupérer le nombre de liens
+        function fetchLinkCount() {
+            fetch('/')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('link-count').innerText = data.linkCount;
+                })
+                .catch(error => console.error('Erreur lors de la récupération du nombre de liens:', error));
+        }
+
+        // Événement de soumission du formulaire
+        document.getElementById('submit-link').addEventListener('submit', function (e) {
+            e.preventDefault(); // Empêche la soumission par défaut
+
+            const urlInput = document.getElementById('url').value;
+
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: urlInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                // Affiche le lien raccourci
+                const linksContainer = document.getElementById('links');
+                const newLinkItem = document.createElement('div');
+                newLinkItem.className = 'link-item';
+                newLinkItem.innerHTML = `Lien original : <a href="${data.message}" target="_blank">${data.message}</a> <br> Lien raccourci : <a href="/${data.short_url}" target="_blank">${data.short_url}</a>`;
+                linksContainer.appendChild(newLinkItem);
+                console.log(data)
+
+                // Met à jour le nombre de liens
+                fetchLinkCount();
+            })
+            .catch(error => console.error('Erreur lors de la soumission de l\'URL:', error));
+        });
+
+        // Récupère le nombre de liens à l'initialisation
+        fetchLinkCount();
+    </script>
+</body>
+</html>
