@@ -16,6 +16,10 @@
     </form>
 
     <h2>Nombre de Liens : <span id="link-count">0</span></h2>
+    <form action="./liens.html" id="liste-liens">
+        <button type="submit">Liste liens</button>
+    </form>
+    
 
     <div id="link-container">
         <h2>Liens Raccourcis :</h2>
@@ -28,10 +32,11 @@
             fetch('/')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('link-count').innerText = data.linkCount;
+                    document.getElementById('link-count').innerText = data.newVisitCount;
                 })
                 .catch(error => console.error('Erreur lors de la récupération du nombre de liens:', error));
         }
+
 
         // Événement de soumission du formulaire
         document.getElementById('submit-link').addEventListener('submit', function (e) {
@@ -50,12 +55,13 @@
             .then(data => {
 
                 // Affiche le lien raccourci
+                const nbliens=document.getElementById('link-count');
                 const linksContainer = document.getElementById('links');
                 const newLinkItem = document.createElement('div');
+                nbliens.innerHTML=data.visit;
                 newLinkItem.className = 'link-item';
                 newLinkItem.innerHTML = `Lien original : <a href="${data.message}" target="_blank">${data.message}</a> <br> Lien raccourci : <a href="/${data.short_url}" target="_blank">${data.short_url}</a>`;
                 linksContainer.appendChild(newLinkItem);
-                console.log(data)
 
                 // Met à jour le nombre de liens
                 fetchLinkCount();
