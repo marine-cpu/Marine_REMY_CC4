@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shorten URL</title>
-
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Raccourcisseur d'URL</h1>
@@ -29,10 +29,11 @@
     <script>
         // Fonction pour récupérer le nombre de liens
         function fetchLinkCount() {
-            fetch('/')
+            fetch('/api/nbliens')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('link-count').innerText = data.newVisitCount;
+                    const nbliens=document.getElementById('link-count');
+                    nbliens.innerHTML=data.nbliens;
                 })
                 .catch(error => console.error('Erreur lors de la récupération du nombre de liens:', error));
         }
@@ -58,9 +59,12 @@
                 const nbliens=document.getElementById('link-count');
                 const linksContainer = document.getElementById('links');
                 const newLinkItem = document.createElement('div');
-                nbliens.innerHTML=data.visit;
+                nbliens.innerHTML=data.nbliens;
                 newLinkItem.className = 'link-item';
-                newLinkItem.innerHTML = `Lien original : <a href="${data.message}" target="_blank">${data.message}</a> <br> Lien raccourci : <a href="/${data.short_url}" target="_blank">${data.short_url}</a>`;
+                newLinkItem.innerHTML = `
+                <br>Lien original : <a href="${data.url}" target="_blank">${data.url}</a>
+                <br> Lien raccourci : <a href="/${data.short_url}" target="_blank">${data.short_url}</a>
+                <br> ${data.message}`;
                 linksContainer.appendChild(newLinkItem);
 
                 // Met à jour le nombre de liens
